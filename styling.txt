@@ -1,0 +1,137 @@
+		
+<style type="text/css">
+* { margin: 0; padding: 0; outline: 0 }
+
+
+body {
+	font-family: "Lucida Grande", Helvetica, Arial, sans;
+	font-size: 12px;
+	margin: 0 auto;
+}
+.form_input
+{
+border:0px;
+padding:3px 2px 6px 2px;
+}
+.but_comment
+{
+background:#f1f1f1;
+border:0px;
+color:#437995;
+margin:5px 0px 5px 0px;
+height:25px;
+padding:3px;
+}
+.top {
+margin-bottom: 15px;
+}
+.buttondiv {
+margin-top: 10px;
+}
+.messagebox{
+	position:absolute;
+	width:200px;
+	margin-left:15px;
+	font-size:11px;
+	padding:3px;
+	color:#fff;
+}
+.messageboxok{
+	position:absolute;
+	width:200px;
+	margin-left:15px;
+	font-size:11px;
+	padding:3px;
+	color:#fff;
+	
+}
+.messageboxerror{
+	position:absolute;
+	width:200px;
+	margin-left:15px;
+	font-size:11px;
+	padding:3px;
+	color:#fff;
+}
+
+.messagebox_ok{
+	position:absolute;
+
+	margin:10px 0px 0px 15px;
+	font-size:11px;
+	padding:5px;
+	color:#fff;
+	background:#2B7697;
+	
+}
+.messagebox_error{
+	position:absolute;
+	
+	margin:10px 0px 0px 15px;
+	font-size:11px;
+	padding:5px;
+	color:#fff;
+	background:#981010;
+}
+
+
+.active_node1
+{
+position:absolute;margin-left:20px;padding:3px 12px 0px 12px;font-size:16px;width:40px;height:23px;-webkit-border-radius: 10px 10px 0px 0px;-moz-border-radius: 10px 10px 0px 0px;border-radius: 10px 10px 0px 0px;
+}
+.active_node2
+{
+position:absolute;margin-left:84px;padding:3px 12px 0px 12px;font-size:16px;width:57px;height:23px;-webkit-border-radius: 10px 10px 0px 0px;-moz-border-radius: 10px 10px 0px 0px;border-radius: 10px 10px 0px 0px;
+}
+#right_s_l a
+{
+color:#fff;
+}
+.user_in
+{margin: 0px 0px 0 0;background:#027998; height:30px; font-weight:bold; padding:0px 0px 0px 5px; font-weight:bold; }
+
+.logout_hide
+{
+display:none;
+}
+
+.div_padding
+{
+padding-left:5px;
+}
+
+#sitemap
+{
+margin-left:20px;
+}
+#sitemap ul li  {
+display: block;
+font-size: 12px;
+}
+#sitemap ul li a  {
+color: #000;
+}
+
+.technology{ /*header of 2nd demo*/
+cursor: hand;
+cursor: pointer;
+
+margin: 5px 0;
+}
+
+
+.openlanguage{ /*class added to contents of 2nd demo when they are open*/
+color: black;
+}
+
+.closedlanguage{ /*class added to contents of 2nd demo when they are closed*/
+color: black;
+}
+
+.margn
+{
+padding:4px 15px 4px 15px;
+}
+.thelanguage{display: none}
+a.hiddenajaxlink{display: none}
+</style>

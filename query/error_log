@@ -1,0 +1,6 @@
+[01-Mar-2012 02:48:22] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'bbfootba'@'localhost' (using password: NO) in /home/bbfootba/public_html/admin/query/query.php on line 67
+[01-Mar-2012 02:48:22] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home/bbfootba/public_html/admin/query/query.php on line 67
+[01-Mar-2012 02:48:22] PHP Warning:  mysql_num_fields(): supplied argument is not a valid MySQL result resource in /home/bbfootba/public_html/admin/query/query.php on line 68
+[01-Mar-2012 02:49:08] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: Access denied for user 'bbfootba'@'localhost' (using password: NO) in /home/bbfootba/public_html/admin/query/query.php on line 66
+[01-Mar-2012 02:49:08] PHP Warning:  mysql_query() [<a href='function.mysql-query'>function.mysql-query</a>]: A link to the server could not be established in /home/bbfootba/public_html/admin/query/query.php on line 66
+[01-Mar-2012 02:49:08] PHP Warning:  mysql_num_fields(): supplied argument is not a valid MySQL result resource in /home/bbfootba/public_html/admin/query/query.php on line 67

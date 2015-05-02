@@ -1,0 +1,5 @@
+[14-Feb-2012 10:16:50] PHP Warning:  imagecreatetruecolor() [<a href='function.imagecreatetruecolor'>function.imagecreatetruecolor</a>]: Invalid image dimensions in /home/bbfootba/public_html/admin/image/process_image.php on line 59
+[14-Feb-2012 10:16:50] PHP Warning:  imagecopyresampled(): supplied argument is not a valid Image resource in /home/bbfootba/public_html/admin/image/process_image.php on line 60
+[14-Feb-2012 10:16:50] PHP Warning:  imagecolorallocate(): supplied argument is not a valid Image resource in /home/bbfootba/public_html/admin/image/process_image.php on line 66
+[14-Feb-2012 10:16:50] PHP Warning:  imagejpeg(): supplied argument is not a valid Image resource in /home/bbfootba/public_html/admin/image/process_image.php on line 70
+[14-Feb-2012 10:16:50] PHP Warning:  imagedestroy(): supplied argument is not a valid Image resource in /home/bbfootba/public_html/admin/image/process_image.php on line 71
