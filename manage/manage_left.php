@@ -5,7 +5,7 @@ $row_priv = mysql_fetch_array($result_priv);
 $city = $row_priv["train_city"];
 $center = $row_priv["center"];
 
-$sql_manage_member = mysql_query("SELECT id from members_priv where user_id='$_SESSION[MEM_ID]' and manage_member = 1 ");
+$sql_manage_member = mysql_query("SELECT id from members_priv where user_id='$_SESSION[MEM_ID]' ");
 $manage_members = mysql_num_rows($sql_manage_member);
 
 ?>

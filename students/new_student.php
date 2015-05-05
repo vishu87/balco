@@ -1,4 +1,5 @@
 <script type="text/javascript">
+var get_type = "sp_edit";
 function validate_required(field,alerttxt)
 {
 with (field)
@@ -19,12 +20,8 @@ with (thisform)
   {
    if (validate_required(name,"Please fill the name!")==false)
   {name.focus();return false;}
-   if (validate_required(train_city,"Please fill Training City!")==false)
-  {train_city.focus();return false;}
-   if (validate_required(train_center,"Please fill Center Name!")==false)
-  {train_center.focus();return false;}
-   if (validate_required(groupid,"Please fill Group Name!")==false)
-  {groupid.focus();return false;}
+   if (validate_required(first_group,"Please fill Group Name!")==false)
+  {first_group.focus();return false;}
   
   }
 }
@@ -53,13 +50,11 @@ with (thisform)
 											
 									<?php
 				
-									echo '<select name="train_city" id="ct2city">
+									echo '<select  id="ctlcityidtype">
 									<option>Select</option>';
 									foreach($cities as $key => $city)
 									{
 										echo '<option value="'.$key.'"';
-										
-										if($row["city_name"] == $_GET["stu_city"]){ echo "selected";}
 										echo '>'.$city.'</option>';
 										$count_city++;
 									}
@@ -77,19 +72,9 @@ with (thisform)
 							<td >
 							<?php
 							
-								echo '<select name="train_center" id="ct2center">
+								echo '<select  id="ctlcenteridtype">
 								<option>Select	</option>';
-								if($_GET["stu_city"])
-								{
-									$sql_center="SELECT * from center WHERE city_name='$_GET[stu_city]'";
-									$result_center=mysql_query($sql_center);
-									while($row_center= mysql_fetch_array($result_center))
-									{
-										echo '<option value="'.$row_center["center_name"].'" ';
-										if($row_center["center_name"] == $_GET["stu_center"]){ echo 'selected';}
-										echo'>'.$row_center["center_name"].'</option>';
-									}
-								}
+
 								echo '</select>';
 								//echo "yes";
 
@@ -104,40 +89,12 @@ with (thisform)
 							</td>
 							<td >
 							<?php
-							if($priv == 'admin')
-							{
-								echo '<select name="groupid" id="">
+
+								echo '<select name="first_group" id="ct1groupidtype">
 								<option>Select	</option>';
-								if($_GET["stu_city"] && $_GET["stu_center"])
-								{
-									$sql_center="SELECT * from groups WHERE city_name='$_GET[stu_city]' AND center_name='$_GET[stu_center]'";
-									$result_center=mysql_query($sql_center);
-									while($row_center= mysql_fetch_array($result_center))
-									{
-										echo '<option>'.$row_center["group_name"].'</option>';
-									}
-								}
+
 								echo '</select>';
-							}
-							else
-							{
-							if($priv != 'centercord')
-							{
-								echo '<select name="groupid" id="ct1group"><option>Select	</option>';
-							}
-							else
-							{
-								echo '<select name="groupid" id="ct1center"><option>Select	</option>';
-									$sql_center="SELECT * from groups WHERE city_name='$city' AND center_name='$center'";
-									$result_center=mysql_query($sql_center);
-									while($row_center= mysql_fetch_array($result_center))
-									{
-										echo '<option>'.$row_center["group_name"].'</option>';
-									}
-									echo '</select>';
-							}
-							}
-							
+
 							?>
 							
 							</td>

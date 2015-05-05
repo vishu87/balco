@@ -1,9 +1,4 @@
-<?php
 
-?>
-<?php
-
-?>
 <table width="100%" cellspacing="0" cellpadding="0">
 						<tr class="color2">
 							<td >

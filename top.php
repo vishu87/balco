@@ -151,6 +151,26 @@ color:#000; padding:3px 5px 9px 5px; background:#FF0;
 				})
 			})
 
+			$("select#ctlcityidtype").change(function(){
+				$.getJSON("select_id_type.php",{id: $(this).val(),type:get_type}, function(j){
+					var options = '';
+					for (var i = 0; i < j.length; i++) {
+						options += '<option value="' + j[i].optionValue + '">' + j[i].optionDisplay + '</option>';
+					}
+					$("#ctlcenteridtype").html(options);
+				})
+			})	
+			
+			$("select#ctlcenteridtype").change(function(){
+				$.getJSON("select_group_id_type.php",{id: $(this).val(),type:get_type}, function(j){
+					var options = '';
+					for (var i = 0; i < j.length; i++) {
+						options += '<option value="' + j[i].optionValue + '">' + j[i].optionDisplay + '</option>';
+					}
+					$("#ct1groupidtype").html(options);
+				})
+			})
+
 
 			$("select#ct2city").change(function(){
 				window.location.replace("?stu_city=" +$(this).val() )

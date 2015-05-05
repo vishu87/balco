@@ -1,5 +1,7 @@
 <script language='JavaScript'>
     checked = false;
+	var get_type = "att_view";
+    
 
     function checkedAll(dt, tot) {
         if (document.getElementById('cl' + dt).value == '') {
@@ -61,55 +63,42 @@
 
 <br>
 <?php
-	echo '<span style="padding:10px; font-size:16px; color:#0E3DCA;">'.$center.', '.$city.'</span><br>';
-	if( ($month && $year) && (city && $center)){
+	echo '<span style="padding:10px; font-size:16px; color:#0E3DCA;">'.$centers[$center_id].', '.$cities[$city_id].'</span><br>';
+		if( ($month && $year) && ($city_id && $center_id)){
 	?>
 	<br>
 	<div style="margin:5px 5px 0px 5px;">
 	<?php
-	if($priv != 'coach') {
-		$sql_groups="SELECT * from groups WHERE city_name='$city' AND center_name='$center'";
-	} else {
-		$sql_mem="SELECT * from members WHERE username='$_SESSION[SESS_MEMBER_ID]'";
-		$result_mem=mysql_query($sql_mem);
-		$row_mem = mysql_fetch_array($result_mem);
-		$sql_groups="SELECT * from coach_groups WHERE (city_name='$city' AND center_name='$center') AND (coach_id='$row_mem[id]' AND active='0')";
+	$group_ids = $priv_view[$city_id][$center_id];
+	if($group_ids == '') die('You are not authorized');
+	$groups = array();
+	$group_names = mysql_query("SELECT id, group_name from groups where id IN (".$group_ids.") ");
+	while ($row_group = mysql_fetch_array($group_names)) {
+		$groups[$row_group["id"]] = $row_group["group_name"];
 	}
-	$sql_groups =$sql_groups." ORDER BY group_name ASC";
-		
-	$result_groups=mysql_query($sql_groups);
 	$count_groups =0;
-	
-	while($row_groups = mysql_fetch_array($result_groups))
-	{
-		if(!$_GET["group"] && $count_groups == 0){	
-			$group = $row_groups["group_name"];
-		} else{
-			if($_GET["group"]){
-				$group = $_GET["group"];
-			}
+	foreach($groups as $id => $group_name ) {
+		if(!isset($group_id) && $count_groups == 0){	
+			$group_id = $id;
 		}
-
-		//echo $group;
-		if(	$row_groups["group_name"] == $group) {
+		if(	$id == $group_id) {
 			echo '&nbsp;&nbsp;&nbsp;<span style="padding:3px; border-top:2px solid #bbb;
 			border-bottom:2px solid #fff;
 			border-left:2px solid #bbb;
-			border-right:2px solid #bbb;"><a href="?month='.$_GET["month"].'&amp;year='.$_GET["year"].'&amp;city='.$_GET["train_city"].'&amp;train_center='.$_GET["train_center"].'&amp;group='.$row_groups["group_name"].'">'.$row_groups["group_name"].'</a></span>&nbsp;&nbsp;&nbsp;';
+			border-right:2px solid #bbb;"><a href="?month='.$_GET["month"].'&amp;year='.$_GET["year"].'&amp;city_id='.$city_id.'&amp;center_id='.$center_id.'&amp;group_id='.$id.'">'.$group_name.'</a></span>&nbsp;&nbsp;&nbsp;';
 		} else {
-			echo '&nbsp;&nbsp;&nbsp;<span style="padding:3px; background:#bbb; color:#fff; border:2px solid #bbb;"><a href="?month='.$_GET["month"].'&amp;year='.$_GET["year"].'&amp;train_city='.$_GET["train_city"].'&amp;train_center='.$_GET["train_center"].'&amp;group='.$row_groups["group_name"].'">'.$row_groups["group_name"].'</a></span>&nbsp;&nbsp;&nbsp;';
+			echo '&nbsp;&nbsp;&nbsp;<span style="padding:3px; background:#bbb; color:#fff; border:2px solid #bbb;"><a href="?month='.$_GET["month"].'&amp;year='.$_GET["year"].'&amp;city_id='.$city_id.'&amp;center_id='.$center_id.'&amp;group_id='.$id.'">'.$group_name.'</a></span>&nbsp;&nbsp;&nbsp;';
 		
 		}
 
 		$count_groups++;
 	}
-	
+	if(!array_key_exists($group_id, $groups)) die("You are not authorized");
 	?>
 	</div>
 	<?php
-		$sql_group = mysql_query("SELECT id from groups where city_name='$city' AND center_name ='$center' AND group_name='$group' limit 1");
-		$row_group = mysql_fetch_array($sql_group);
-		$groupid = $row_group["id"];
+		
+		$groupid = $group_id;
 
 		$sql_case="SELECT id, father_mob, name, dos from students WHERE second_group='$groupid' AND active='0'";
 		$sql_case =$sql_case." ORDER BY name ASC";
@@ -292,7 +281,7 @@
 	</div>
 	</div>
 
-	<a href="atten_xl.php?city=<?php echo $city;?>&center=<?php echo $center;?>&group=<?php echo $group;?>&month=<?php echo $month;?>&year=<?php echo $year;?>">Export to excel</a>
+	<a href="atten_xl.php?city=<?php echo $city_id;?>&center=<?php echo $center_id;?>&group=<?php echo $group_id;?>&month=<?php echo $month;?>&year=<?php echo $year;?>">Export to excel</a>
 	<?php
 	} else {
 		echo "Please select parameters from left";

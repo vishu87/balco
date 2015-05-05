@@ -1,36 +1,48 @@
 <?php
 $months_name = array ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
-//$tr_city = array('Sikkim','New Delhi', 'Guwahati');
+
 $month = base64_decode($_GET["month"]);
 $year = base64_decode($_GET["year"]);
 
-if($priv == 'admin')
-	{
-		$city = $_GET["train_city"];
+$cities = array();
+$centers = array();
+$groups = array();
+$priv_view = array();
+$priv_edit = array();
+
+if($_SESSION['PRIV'] != 'admin'){
+	$sql_priv=mysql_query("SELECT members_priv.center_id, members_priv.groups, city.city_name, city.id as city_id, center.center_name from members_priv inner join center on members_priv.center_id = center.id inner join city on center.city_id = city.id WHERE members_priv.user_id='$_SESSION[MEM_ID]' and members_priv.att_view = 1");
+	while ($row_priv = mysql_fetch_array($sql_priv)) {
+		$priv_view[$row_priv["city_id"]][$row_priv["center_id"]] = $row_priv["groups"];
+		$cities[$row_priv["city_id"]] = $row_priv["city_name"];
+		$centers[$row_priv["center_id"]] = $row_priv["center_name"];
 	}
-else
-{
-	$city = base64_decode($_GET["train_city"]);
+
+	$sql_priv=mysql_query("SELECT members_priv.center_id, members_priv.groups, city.city_name, city.id as city_id, center.center_name from members_priv inner join center on members_priv.center_id = center.id inner join city on center.city_id = city.id WHERE members_priv.user_id='$_SESSION[MEM_ID]' and members_priv.att_edit = 1");
+	while ($row_priv = mysql_fetch_array($sql_priv)) {
+		$priv_edit[$row_priv["city_id"]][$row_priv["center_id"]] = $row_priv["groups"];
+	}
+} else {
+	
+	$sql_priv=mysql_query("SELECT center.id as center_id, city.city_name, city.id as city_id, center.center_name from center inner join city on center.city_id = city.id ");
+	while ($row_priv = mysql_fetch_array($sql_priv)) {
+		$gpx = array();
+		$sql_groups = mysql_query("SELECT id from groups where center_id = '$row_priv[center_id]' ");
+		while ($row_groups = mysql_fetch_array($sql_groups)) {
+
+			array_push($gpx, $row_groups["id"]);
+		}
+		$priv_view[$row_priv["city_id"]][$row_priv["center_id"]] = implode(',', $gpx);
+		$priv_edit[$row_priv["city_id"]][$row_priv["center_id"]] = $priv_view[$row_priv["city_id"]][$row_priv["center_id"]];
+		$cities[$row_priv["city_id"]] = $row_priv["city_name"];
+		$centers[$row_priv["center_id"]] = $row_priv["center_name"];
+	}
 }
-$center = $_GET["train_center"];
-if($priv == 'centercord')
-{
-	$sql_priv="SELECT * from members WHERE username='$_SESSION[SESS_MEMBER_ID]'";
-	$result_priv=mysql_query($sql_priv);
-	$row_priv = mysql_fetch_array($result_priv);
-	$city = $row_priv["train_city"];
-	$center = $row_priv["center"];
-}
-//echo $month;
-?>
-<?php
-if($_GET["id"])
-{
-$sql_top="SELECT * from students WHERE id='$_GET[id]'";
-$sql_top =$sql_top." ORDER BY id DESC";
-$result_top=mysql_query($sql_top);
-$row_top = mysql_fetch_array($result_top);
-	}								
+
+if(isset($_GET["city_id"])) $city_id = $_GET["city_id"];							
+if(isset($_GET["center_id"])) $center_id = $_GET["center_id"];							
+if(isset($_GET["group_id"])) $group_id = $_GET["group_id"];	
+
 ?>
 
 <table width="100%" cellspacing="0" cellpadding="0">
@@ -38,8 +50,8 @@ $row_top = mysql_fetch_array($result_top);
 							<td >
 							<form action="?" method="get"><table cellspacing="0" cellpadding="0" width="100%">
 									<tr>
-											<td align="right" width="50%">Select Month</td>
-											<td><select name="month">
+							<td align="right" width="50%">Select Month</td>
+							<td><select name="month">
 							
 							<?php
 							
@@ -79,39 +91,17 @@ $row_top = mysql_fetch_array($result_top);
 											
 									<?php
 				
-								if($priv == 'admin')
-								{
-									echo '<select name="train_city" id="ctlcity">
-									<option>Select</option>';
-									$sql_case="SELECT * from city ";
+									echo '<select name="city_id"  id="ctlcityidtype">
+									<option value="0">Select</option>';
 									
-									$sql_case = $sql_case.'ORDER BY city_name ASC';
-									$result_case=mysql_query($sql_case);
-									$count_city =1;
-									while($row = mysql_fetch_array($result_case))
+									foreach($cities as $key=>$value)
 									{
-										echo '<option value="'.$row["city_name"].'" '; 
-										if($row["city_name"] == $city) {echo 'selected';}
-										echo ' >'.$row["city_name"].'</option>';
+										echo '<option value="'.$key.'" '; 
+										echo ' >'.$value.'</option>';
 										$count_city++;
 									}
 									echo'</select>';
-								}
-								else
-								{
-									
-											$sql_city="SELECT * from members WHERE username='$_SESSION[SESS_MEMBER_ID]'";
-											$result_city=mysql_query($sql_city);
-											$row_city = mysql_fetch_array($result_city);
-											$city = $row_city["train_city"];
-											
-											$sql_case = $sql_case." WHERE city_name ='$city'";
-									
-									
-									echo '<input name="train_city" type="hidden" id="ctlcity" value="'.base64_encode($city).'">';
-									
-									echo $city;
-								}
+
 								
 								
 								
@@ -125,82 +115,12 @@ $row_top = mysql_fetch_array($result_top);
 							<td >
 							<?php
 							
-							if($priv == 'admin')
-							{
-								echo '<select name="train_center" id="ctlcenter"><option>Select	</option>';
-								if($city)
-								{
-									$sql_center="SELECT * from center WHERE city_name='$city'";
-									$result_center=mysql_query($sql_center);
-									while($row_center= mysql_fetch_array($result_center))
-									{
-										echo '<option ';
-										if($row_center["center_name"] == $center)
-										{echo 'selected';}
-										echo '>'.$row_center["center_name"].'</option>';
-									}
-								}
+
+								echo '<select name="center_id" id="ctlcenteridtype"><option value="0">Select</option>';
 								
 								echo '</select>';
 								//echo "yes";
-							}
-							else
-							{
-								//echo $priv;
-								if($priv == 'citycord')
-								{
-									//echo "yes";
-									echo '<select name="train_center" id="ct1center"><option>Select	</option>';
-									$sql_center="SELECT * from center WHERE city_name='$city'";
-									$result_center=mysql_query($sql_center);
-									while($row_center= mysql_fetch_array($result_center))
-									{
-										echo '<option ';
-										if($row_center["center_name"] == $center)
-										{echo 'selected';}
-										echo '>'.$row_center["center_name"].'</option>';
-									}
-									echo '</select>';
-								}
-								else
-								{
-								//echo "yesmm";
-									if($priv == 'centercord')
-									{
-																			
-											echo $center;
-										
-									}
-									else
-									{
-										
-										echo '<select name="train_center" id="ct1center"><option>Select	</option>';
-									$sql_center="SELECT * from coach_groups WHERE city_name='$city' ORDER BY center_name ASC";
-									$result_center=mysql_query($sql_center);
-									$old_var="";
-									while($row_center= mysql_fetch_array($result_center))
-									{
-										if($row_center["center_name"] == $old_var)
-										{
-										
-										}
-										else
-										{
-										$old_var = $row_center["center_name"]; 
-										echo '<option ';
-										if($row_center["center_name"] == $center)
-										{echo ' selected';}
-										echo '>'.$row_center["center_name"].'</option>';
-										}
-									}
-									echo '</select>';
-									}
 							
-								}	
-							
-							
-							
-							}
 							?>
 							
 							
@@ -209,7 +129,7 @@ $row_top = mysql_fetch_array($result_top);
 								
 								</table>
 								<div align="center">
-						<input type="SUBMIT" Value="GO" class="color3" style="border:0px; margin:10px;">
+						<input type="SUBMIT" Value="GO" class="color3" style="border:0px; margin:10px; padding:5px 10px">
 						</div>
 							</form>
 							</td>

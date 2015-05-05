@@ -3,8 +3,6 @@ session_start();
 include('config.php');
 include('auth.php');
 
-date_default_timezone_set('Europe/London');
-
 /** PHPExcel */
 require_once 'phpxml/Classes/PHPExcel.php';
 

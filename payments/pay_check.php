@@ -3,8 +3,19 @@
 						<a href="students.php?type=browse" style="text-decoration:underline">Payments Verifications</a> :
 						</div>
 						<?php
+						if($_SESSION["PRIV"] == 'admin'){
+							$query_add='';
+						} else {
+							$groups = array();
+							$query_pay = mysql_query("SELECT groups from members_priv where payments = 1 and user_id = $_SESSION[MEM_ID] ");
+							while ($row_pay = mysql_fetch_array($query_pay)) {
+								array_push($groups, $row_pay["groups"]);
+							}
+							$query_add = " and first_group IN (".implode(',', $groups).") ";
+						}
 
-						$sql_case="SELECT * from payment_history WHERE verified='0' ORDER BY dor ASC";
+						$sql_case="SELECT payment_history.*,  name, father, father_mob, father_email, group_name as groupid, center.center_name as center, city.city_name as train_city from payment_history join students on payment_history.student_id = students.id join groups on students.first_group = groups.id join center on groups.center_id = center.id join city on center.city_id = city.id WHERE verified = 0 ".$query_add." ORDER BY dor ASC";
+
 						$result_case=mysql_query($sql_case);
 							?>		
 						
@@ -72,10 +83,6 @@
 									{
 									
 									$schol = 'schol1';
-										$qry="SELECT * FROM students WHERE id='$row[student_id]' ";
-										$result_qry=mysql_query($qry);
-										$row_qry = mysql_fetch_array($result_qry);
-										
 									
 									//$age = duration($row["dob"]);
 									if($count%2 ==0)
@@ -95,12 +102,12 @@
 									<input type="checkbox" name="verify[]" value="'.$row["id"].'">
 									</td>
 									<td class="'.$schol.'">';
-									echo date("M j, Y", $row["dor"]);
+									echo ($row["dor"] != '')?date("M j, Y", $row["dor"]):'';
 									echo '</td><td class="'.$schol.'">';
 									echo date("M j, Y", $row["dos"]);
 									echo '</td><td class="'.$schol.'">';
 									echo date("M j, Y", $row["doe"]);
-									
+										
 									echo '</td>
 
 									<td class="'.$schol.'">'.$row["reg_fee"].'</td>
@@ -116,23 +123,23 @@
 									'.$row["p_remark"].'
 									</td>
 									<td class="'.$schol.'">
-									'.$row_qry["name"].'
+									'.$row["name"].'
 									</td>
 									<td class="'.$schol.'">
-									'.$row_qry["train_city"].'
+									'.$row["train_city"].'
 									</td>
 									<td class="'.$schol.'">
-									'.$row_qry["center"].'
+									'.$row["center"].'
 									</td>
 									<td class="'.$schol.'">
-									'.$row_qry["groupid"].'
+									'.$row["groupid"].'
 									</td>';
 									
 									
 									
 									echo '
 									<td class="'.$schol.'" >
-									'.$row_qry["father"].'<br>'.$row_qry["father_mob"].'
+									'.$row["father"].'<br>'.$row["father_mob"].'
 									</td>';
 									
 									

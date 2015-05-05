@@ -68,6 +68,27 @@
 			$_SESSION['SESS_MEMBER_ID'] = $member['username'];
 			$_SESSION['PRIV'] = $member['priv'];
 			$_SESSION['MEM_ID'] = $member['id'];
+			$_SESSION['SUPER_ADMIN'] = $member["super_admin"];
+
+			$check = mysql_query("SELECT COUNT(id) as count from members_priv where att_view = 1 and user_id = '$_SESSION[MEM_ID]' ");
+			$row = mysql_fetch_array($check);
+			$_SESSION["attendance"] = $row["count"];
+
+			$check = mysql_query("SELECT COUNT(id) as count from members_priv where eval_view = 1 and user_id = '$_SESSION[MEM_ID]' ");
+			$row = mysql_fetch_array($check);
+			$_SESSION["evaluation"] = $row["count"];
+
+			$check = mysql_query("SELECT COUNT(id) as count from members_priv where c_att_view = 1 and user_id = '$_SESSION[MEM_ID]' ");
+			$row = mysql_fetch_array($check);
+			$_SESSION["coach"] = $row["count"];
+
+			$check = mysql_query("SELECT COUNT(id) as count from members_priv where payments = 1 and user_id = '$_SESSION[MEM_ID]' ");
+			$row = mysql_fetch_array($check);
+			$_SESSION["payments"] = $row["count"];
+
+			$check = mysql_query("SELECT COUNT(id) as count from members_priv where adjustment = 1 and user_id = '$_SESSION[MEM_ID]' ");
+			$row = mysql_fetch_array($check);
+			$_SESSION["adjustment"] = $row["count"];
 			
 			session_write_close();
 			header("location: students.php?type=browse");

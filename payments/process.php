@@ -3,8 +3,6 @@
 require_once('../auth.php');
 require_once('../config.php');
 
-if($_SESSION["PRIV"] != 'admin') die('You are not authorized');
-
 $link = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
 	if(!$link) {
 		die('Failed to connect to server: ' . mysql_error());

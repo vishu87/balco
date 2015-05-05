@@ -145,11 +145,9 @@ $dob_str = strtotime($dob);
 $dos = strtotime($_POST["dos"]);
 $dor = strtotime($_POST["dor"]);
 $doe = strtotime($_POST["doe"]);
-$sql_group = mysql_query("SELECT id from groups where city_name='$_POST[train_city]' AND center_name ='$_POST[train_center]' AND group_name='$_POST[groupid]' limit 1");
-$row_group = mysql_fetch_array($sql_group);
-$group_id = $row_group["id"];
-mysql_query("INSERT INTO students (name, dob, email, school, mobile, status_email, status_mob, train_city, center,  groupid, first_group, father, father_mob, father_email, father_status_mob, father_status_email, mother, mother_mob, mother_email, mother_status_mob , mother_status_email, address, city, state, pic, dos, doe, add_date, added_by)
-			VALUES ('$_POST[name]', '$dob_str','$_POST[email]','$_POST[school]', '$_POST[mobile]', '$_POST[status_email]', '$_POST[status_mob]', '$_POST[train_city]', '$_POST[train_center]','$_POST[groupid]','$group_id','$_POST[father]','$_POST[father_mob]', '$_POST[father_email]','$_POST[father_status_mob]', '$_POST[father_status_email]' , '$_POST[mother]','$_POST[mother_mob]', '$_POST[mother_email]','$_POST[mother_status_mob]', '$_POST[mother_status_email]', '$_POST[address]','$_POST[city]','$_POST[state]','$picname', '$dos', '$doe','$feed_date','$_SESSION[SESS_MEMBER_ID]' )");
+
+mysql_query("INSERT INTO students (name, dob, email, school, mobile, status_email, status_mob, first_group, father, father_mob, father_email, father_status_mob, father_status_email, mother, mother_mob, mother_email, mother_status_mob , mother_status_email, address, city, state, pic, dos, doe, add_date, added_by)
+			VALUES ('$_POST[name]', '$dob_str','$_POST[email]','$_POST[school]', '$_POST[mobile]', '$_POST[status_email]', '$_POST[status_mob]','$_POST[first_group]','$_POST[father]','$_POST[father_mob]', '$_POST[father_email]','$_POST[father_status_mob]', '$_POST[father_status_email]' , '$_POST[mother]','$_POST[mother_mob]', '$_POST[mother_email]','$_POST[mother_status_mob]', '$_POST[mother_status_email]', '$_POST[address]','$_POST[city]','$_POST[state]','$picname', '$dos', '$doe','$feed_date','$_SESSION[SESS_MEMBER_ID]' )");
 $sql_case="SELECT * from students ";
 $sql_student =$sql_case." ORDER BY id DESC";
 $result_case=mysql_query($sql_student);

@@ -1,30 +1,21 @@
 <?php 
 error_reporting(E_ALL);
+session_start();
+include('config.php');
+include('auth.php');
 
+date_default_timezone_set('Europe/London');
 
 /** PHPExcel */
 require_once 'phpxml/Classes/PHPExcel.php';
 
-
-/*
-$con = mysql_connect("localhost","root","");
+$con = mysql_connect(DB_HOST,DB_USER,DB_PASSWORD);
 if (!$con)
   {
   die('Could not connect: ' . mysql_error());
   }
 
-mysql_select_db("bbfs", $con);
-
-*/
-$con = mysql_connect("localhost","bbfoomlp_main","!delMUMc#@ndig@rh!");
-if (!$con)
-  {
-  die('Could not connect: ' . mysql_error());
-  }
-
-mysql_select_db("bbfoomlp_bbfs", $con);
-
-
+mysql_select_db(DB_DATABASE, $con);
 // Create new PHPExcel object
 $objPHPExcel = new PHPExcel();
 
@@ -168,9 +159,8 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('A'.chr($cell_val))->setWidth
 									
 									
 			$seq++;
-	$sql_group = mysql_query("SELECT id from groups where city_name='$_GET[city]' AND center_name ='$_GET[center]' AND group_name='$_GET[group]' limit 1");
-		$row_group = mysql_fetch_array($sql_group);
-		$groupid = $row_group["id"];
+
+		$groupid = $_GET["group"];
 			
 $sql_dummy="SELECT date from attendance WHERE student_id='dm' AND groupid='$groupid' AND month='$_GET[month]' AND year='$_GET[year]' ";
 							$sql_dummy=$sql_dummy." ORDER BY id ASC";
@@ -222,7 +212,7 @@ $tot_class =0;
 			$objPHPExcel->getActiveSheet()->getStyle('AI'.$seq)->applyFromArray($styleArray3);
 			$objPHPExcel->getActiveSheet()->getStyle('AJ'.$seq)->applyFromArray($styleArray3);
 							
-			$sql_case="SELECT id, name, father_mob,dos from students WHERE ( train_city='$_GET[city]' AND center='$_GET[center]') AND ( groupid='$_GET[group]' AND active = '0') ";
+			$sql_case="SELECT id, name, father_mob,dos from students WHERE first_group = $groupid AND active = '0' ";
 							$sql_case =$sql_case." ORDER BY name ASC";
 							//echo $group.$sql_case;
 							$result_att=mysql_query($sql_case);

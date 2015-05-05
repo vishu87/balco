@@ -137,66 +137,45 @@ background:#90FFF8;
 <div class="menu" >
 
 		<ul>
-		<li><a href="students.php?type=browse" >Students</a>
-			
+		<li>
+			<a href="students.php?type=browse" >Students</a>
 		</li>
-		<?php
-		if($priv != 'general'){
-		?>
-		<li><a href="attendance.php" >Students' Attendance</a>
-			
-		</li>
-		<li><a href="ds_attendance.php" >DS' Attendance</a>
-			
-		</li>
-			<li><a href="performance.php" >Students' Evaluations</a>
-			
-		</li>
+		<?php if($_SESSION["attendance"] > 0 || $priv == 'admin' ): ?>
+			<li><a href="attendance.php" >Students' Attendance</a></li>
+			<li><a href="ds_attendance.php" >DS' Attendance</a></li>
+		<?php endif;?>
+
+		<?php if($_SESSION["evalution"] > 0 || $priv == 'admin' ): ?>
+			<li><a href="performance.php" >Students' Evaluations</a></li>
+		<?php endif;?>
+		<li><a href="manage.php" >Manage</a></li>
+		<?php if($_SESSION["coach"] > 0 || $priv == 'admin' ): ?>
+			<li><a href="coach.php" >Coaches' Attenance</a></li>
+		<?php endif;?>
+
+		<?php if($_SESSION["payments"] > 0 || $priv == 'admin' ): ?>
+			<li><a href="payments.php" >Payments</a></li>
+		<?php endif;?>
 
 
-		
 		<?php
-		if($priv != 'coach'){
-		echo '<li><a href="coach.php" >Coaches\' Attendance</a>
-			
-		</li>';}
-		?>
-		<li><a href="manage.php" >Manage</a>
-			
-		</li>
-		
+		if($priv == 'admin' && $_SESSION['SUPER_ADMIN'] == 1){
+			?>
+			<li><a href="updates.php" >Updates</a>
+			<li><a href="gallery.php" >Update Gallery</a></li>
+			<li><a href="query.php" >Query</a></li>
+		<?php 
+		} ?>
+		<?php if($_SESSION["attendance"] > 0 || $priv == 'admin' ){ ?>
+			<li><a href="adjustment.php" >Adjustment</a></li>
 		<?php } ?>
-		
+
 		<?php
-		if($priv == 'admin'){
-		?>
-		<li><a href="payments.php" >Payments</a>
-			
-		</li>
-		<li><a href="updates.php" >Updates</a>
-			<li><a href="gallery.php" >Update Gallery</a>
-		</li>
-			<li><a href="query.php" >Query</a>
-			
-		</li>
-		<?php } 
-			if($priv == 'admin' || $priv=='citycord' || $priv == 'centercord'){
-		?>
-		<li><a href="adjustment.php" >Adjustment</a>
-			
-		</li>
-	
-		<?php } ?>
-		<?php
-		if($priv == 'admin'){
+		if($priv == 'admin' && $_SESSION['SUPER_ADMIN'] == 1){
 		?>
 			<li><a href="schema.php" >Structure</a>
 			
 		</li>
-		<?php } ?>
-		<?php
-		if($priv != 'general'){
-		?>
 		<li><a href="images.php" target="_blank" >Images</a>
 			
 		</li>

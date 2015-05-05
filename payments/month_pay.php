@@ -1,5 +1,5 @@
-																																															<script language='JavaScript'>
-      checked = true;
+<script type="text/javascript">
+checked = true;
       function checkedAll () {
         if (checked == false){checked = true}else{checked = false}
 	for (var i = 0; i < document.getElementById('students').elements.length; i++) {
@@ -32,12 +32,23 @@ return $str;
 						<a href="students.php?type=browse" style="text-decoration:underline">Payments</a> :
 						</div>
 						<?php
+						if($_SESSION["PRIV"] == 'admin'){
+							$query_add='';
+						} else {
+							$groups = array();
+							$query_pay = mysql_query("SELECT groups from members_priv where payments = 1 and user_id = $_SESSION[MEM_ID] ");
+							while ($row_pay = mysql_fetch_array($query_pay)) {
+								array_push($groups, $row_pay["groups"]);
+							}
+							$query_add = " and first_group IN (".implode(',', $groups).") ";
+						}
+						
 						
 						if($_GET["dos"] && $_GET["doe"])
 						{
-						$dos = strtotime($_GET["dos"]);
-						$doe = strtotime($_GET["doe"]);
-						$sql_case="SELECT * from payment_history WHERE dor >= '$dos' AND dor<='$doe' ORDER BY dor DESC";
+							$dos = strtotime($_GET["dos"]);
+							$doe = strtotime($_GET["doe"]);
+							$sql_case="SELECT payment_history.*,  name, father, father_mob, father_email, group_name as groupid, center.center_name as center, city.city_name as train_city from payment_history join students on payment_history.student_id = students.id join groups on students.first_group = groups.id join center on groups.center_id = center.id join city on center.city_id = city.id WHERE payment_history.dor >= '$dos' AND payment_history.dor<='$doe' ".$query_add." ORDER BY dor DESC";
 						$result_case=mysql_query($sql_case);
 							?>		
 						
@@ -104,12 +115,7 @@ return $str;
 									{
 									
 									$schol = 'schol1';
-										$qry="SELECT name,train_city,center,groupid,father,father_mob FROM students WHERE id='$row[student_id]' ";
-
-										$result_qry=mysql_query($qry);
-										$row_qry = mysql_fetch_array($result_qry);
 										
-									
 									//$age = duration($row["dob"]);
 									if($count%2 ==0)
 									{
@@ -149,23 +155,23 @@ return $str;
 									'.$row["p_remark"].'
 									</td>
 									<td class="'.$schol.'">
-									'.$row_qry["name"].'
+									'.$row["name"].'
 									</td>
 									<td class="'.$schol.'">
-									'.$row_qry["train_city"].'
+									'.$row["train_city"].'
 									</td>
 									<td class="'.$schol.'">
-									'.$row_qry["center"].'
+									'.$row["center"].'
 									</td>
 									<td class="'.$schol.'">
-									'.$row_qry["groupid"].'
+									'.$row["groupid"].'
 									</td>';
 									
 									
 									
 									echo '
 									<td class="'.$schol.'" >
-									'.$row_qry["father"].'<br>'.$row_qry["father_mob"].'
+									'.$row["father"].'<br>'.$row["father_mob"].'
 									</td>';
 									
 									

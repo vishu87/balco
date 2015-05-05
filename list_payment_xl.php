@@ -1,43 +1,19 @@
 <?php 
-error_reporting(E_ALL);
+session_start();
+include('config.php');
+include('auth.php');
 
-date_default_timezone_set('Asia/Calcutta');
 
 /** PHPExcel */
 require_once 'phpxml/Classes/PHPExcel.php';
-/*
-$con = mysql_connect("localhost","root","");
+
+$con = mysql_connect(DB_HOST,DB_USER,DB_PASSWORD);
 if (!$con)
   {
   die('Could not connect: ' . mysql_error());
   }
 
-mysql_select_db("bbfs", $con);
-
-*/
-$con = mysql_connect("localhost","bbfoomlp_main","!delMUMc#@ndig@rh!");
-if (!$con)
-  {
-  die('Could not connect: ' . mysql_error());
-  }
-
-mysql_select_db("bbfoomlp_bbfs", $con);
-
-function Duration2($s){
-
-/* Find out the seconds between each dates */
-$timestamp = $s - strtotime("now");
-
-/* Cleaver Maths! */
-
-$days=floor($timestamp/(60*60*24));
-/* Display for date, can be modified more to take the S off */
-
- $str = $days; 
-return $str;
-
-}
-
+mysql_select_db(DB_DATABASE, $con);
 // Create new PHPExcel object
 $objPHPExcel = new PHPExcel();
 
@@ -137,9 +113,6 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(40);
 							$count_student = 0;
 							while($row_att = mysql_fetch_array($result_att))
 							{
-								$qry="SELECT * FROM students WHERE id='$row_att[student_id]' ";
-								$result_qry=mysql_query($qry);
-								$row_qry = mysql_fetch_array($result_qry);
 								$count_student++;
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$seq, $count_student);	
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$seq, date("d M y ", $row_att["dor"]));
@@ -151,13 +124,13 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(40);
 		
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$seq,  $row_att["months"]);
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.$seq, $row_att["p_remark"]);
-		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$seq, $row_qry["name"]);
-		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$seq, $row_qry["train_city"]);
-		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$seq, $row_qry["center"]);
-		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.$seq, $row_qry["groupid"]);
-		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('N'.$seq, $row_qry["father"]);
-		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('O'.$seq, $row_qry["father_mob"]);
-		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('P'.$seq, $row_qry["father_email"]);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$seq, $row_att["name"]);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$seq, $row_att["train_city"]);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$seq, $row_att["center"]);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.$seq, $row_att["groupid"]);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('N'.$seq, $row_att["father"]);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('O'.$seq, $row_att["father_mob"]);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('P'.$seq, $row_att["father_email"]);
 		$verify = ($row_att["verified"]==1)?'Yes':'No';
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q'.$seq, $verify);
 	

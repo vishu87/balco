@@ -12,7 +12,7 @@ $link = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
 		die("Unable to select database");
 	}
 	$month  = $_POST["month"];
-	$year  = '2013';
+	$year  = $_POST["year"];
 	
 	$date_mon1 =strtotime( $month.'/1/'.$year);
 	$date_mon = strtotime( '-1 day' ,$date_mon1);
@@ -21,7 +21,7 @@ $link = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
 	//echo date("d m y ", $date_mon);
 	$days = intval(mysql_real_escape_string($_POST["days"]));
 	
-$query = "SELECT id, name, dos from students where train_city='$_POST[train_city]' AND center='$_POST[train_center]' AND groupid='$_POST[groupid]' AND active = '0'";
+$query = "SELECT id, name, dos from students where first_group = '$_POST[groupid]' AND active = '0'";
 
 $result  = mysql_query($query);
 
