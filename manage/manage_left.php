@@ -12,8 +12,7 @@ $manage_members = mysql_num_rows($sql_manage_member);
 <table width="100%" cellspacing="0" cellpadding="0">
 						
 						<?php
-						if($priv == 'admin'	)
-						{
+						if($priv == 'admin'	&& $_SESSION["SUPER_ADMIN"]){
 						?>
 						<tr>
 							<td class="<?php 
@@ -26,7 +25,7 @@ $manage_members = mysql_num_rows($sql_manage_member);
 						?>
 						
 						<?php 
-						if($priv == 'admin'	 || $priv == 'citycord')
+						if($priv == 'admin'	&& $_SESSION["SUPER_ADMIN"])
 						{
 							echo '<tr class="';
 							if($_GET["type"] == 'center')
@@ -43,7 +42,7 @@ $manage_members = mysql_num_rows($sql_manage_member);
 						
 						<?php
 						
-						if($priv != 'coach'	){
+						if($priv == 'admin'	&& $_SESSION["SUPER_ADMIN"]){
 						
 													echo '<tr class="';
 													if($_GET["type"] == 'group')
@@ -56,8 +55,7 @@ $manage_members = mysql_num_rows($sql_manage_member);
 							}
 						?>
 						<?php
-						if($priv == 'admin' || $priv == 'citycord')
-						{
+						if($priv == 'admin'	&& $_SESSION["SUPER_ADMIN"]){
 						?>
 						<tr>
 							<td class="<?php 
@@ -71,9 +69,7 @@ $manage_members = mysql_num_rows($sql_manage_member);
 						?>
 
 						<?php
-						//if($manage_members > 0)
-						if($priv == 'admin' || $priv == 'citycord')
-						{
+						if($priv == 'admin'){
 						?>
 						<tr>
 							<td class="<?php 
@@ -86,20 +82,15 @@ $manage_members = mysql_num_rows($sql_manage_member);
 						}
 						?>
 
-						<?php
-						if($priv != 'coach')
-						{
-						?>
-						<tr>
+
+						<tr style="display:none">
 							<td class="<?php 
 							if($_GET["type"] == 'coach')
 							echo "color1";
 							?>"><a href="manage.php?type=coach">Manage Coaches</a></td>
 						</tr>
 						
-						<?php
-						}
-						?>
+
 						<tr>
 							<td class="<?php 
 							if($_GET["type"] == 'profile')

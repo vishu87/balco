@@ -57,23 +57,16 @@ with (thisform)
 							</td>
 							<td>
 							<?php
-							
-							if($priv == 'admin')
-							{
+
 								echo '<select name="city" >';
 								$sql_case="SELECT * from city ORDER BY city_name ASC";
 								$result_case=mysql_query($sql_case);
 								while($row = mysql_fetch_array($result_case))
 								{
-									echo '<option>'.$row["city_name"].'</option>';
+									echo '<option value="'.$row["id"].'">'.$row["city_name"].'</option>';
 								}
 								echo '</select>';
-							}
-							else
-							{
-								echo '<input type="hidden" name="city" value="'.$city.'">';
-								echo $city;
-							}
+								
 							?>
 							
 							</td>
@@ -101,10 +94,7 @@ with (thisform)
 						Available Centers:
 						<?php
 						
-								$qry="SELECT * FROM center ";
-								if($priv != 'admin'){
-								$qry = $qry." WHERE city_name='$city' ";}
-								$qry = $qry."ORDER BY city_name ASC";
+								$qry="SELECT center.id, center.center_name, city.city_name, center.city_id FROM center join city on center.city_id = city.id order by city_name ASC ";
 								$result=mysql_query($qry);
 								//$row_num_qry = mysql_num_rows($result);
 								?>	
@@ -126,7 +116,18 @@ with (thisform)
 						{
 						if($_GET["id"] == $row["id"])
 						  {
-						  echo '<form action="manage/process_center.php?type=2&amp;id='.$row["id"].'" method="post"><tr><td><input type="text" name="center_name_edit" value="'.$row["center_name"].'"></td><td align="center"><input type="hidden" name="city_name_edit" value="'.$row["city_name"].'">'.$row["city_name"].'</td><td  align="center"><input type="submit" value="GO"></td></form><td align="center"><a href= "manage/process_center.php?type=6&amp;id='.$row["id"].'"  onclick="return confirm(\'Do You Really Want to Delete '.$row["center_name"].', '.$row["city_name"].'\');"><img src="erase.png"></a></td></tr>';
+						  echo '<form action="manage/process_center.php?type=2&amp;id='.$row["id"].'" method="post"><tr><td><input type="text" name="center_name_edit" value="'.$row["center_name"].'"></td><td align="center">';
+						  echo '<select name="city_edit" >';
+								$sql_case_city="SELECT * from city ORDER BY city_name ASC";
+								$result_case_city=mysql_query($sql_case_city);
+								while($row_city = mysql_fetch_array($result_case_city))
+								{
+									echo '<option value="'.$row_city["id"].'" ';
+									echo ($row_city["id"] == $row["city_id"])?'selected':'';
+									echo '>'.$row_city["city_name"].'</option>';
+								}
+						  echo '</select>';
+						  echo '<td  align="center"><input type="submit" value="GO"></td></form><td align="center"><a href= "manage/process_center.php?type=6&amp;id='.$row["id"].'"  onclick="return confirm(\'Do You Really Want to Delete '.$row["center_name"].', '.$row["city_name"].'\');"><img src="erase.png"></a></td></tr>';
 						  
 						  }
 						  else{

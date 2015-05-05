@@ -152,7 +152,7 @@ $dob_str = strtotime($dob);
 $pass = md5($_POST["username"]);
 // $sql ="INSERT INTO members (name, username, password, priv, edit_priv, dob, email, mobile, train_city, center, address, city, state, pic)
 // 			VALUES ('$_POST[name]', '$_POST[username]', '$pass', '$_POST[priv]', '$_POST[edit_pr]', '$dob_str', '$_POST[email]', '$_POST[mobile]', '$_POST[train_city]', '$_POST[train_center]', '$_POST[address]',' $_POST[city]','$_POST[state]', '$picname' )";
-$sql ="INSERT INTO members (name, username, password, dob, email, mobile, address, city, state, pic, updates, query_table, structure, add_city, add_center) VALUES ('$_POST[name]', '$_POST[username]', '$pass', '$dob_str', '$_POST[email]', '$_POST[mobile]', '$_POST[address]',' $_POST[city]','$_POST[state]', '$picname', '$_POST[updates]','$_POST[query_table]','$_POST[structure]','$_POST[add_city]','$_POST[add_center]' )";
+$sql ="INSERT INTO members (name, username, password, priv , dob, email, mobile, address, city, state, pic, super_admin, city_id, center_id) VALUES ('$_POST[name]', '$_POST[username]', '$pass', '$_POST[priv]', '$dob_str', '$_POST[email]', '$_POST[mobile]', '$_POST[address]',' $_POST[city]','$_POST[state]', '$picname', '$_POST[updates]','$_POST[query_table]','$_POST[structure]','$_POST[add_city]','$_POST[super_admin]', '$_POST[city_id]', '$_POST[center_id]' )";
 mysql_query($sql);
 
 header("Location: ../manage.php?type=member");
@@ -164,31 +164,31 @@ header("Location: ../manage.php?type=member");
 
 
 
-if($_GET["type"] == 2)
-{
-move_uploaded_file($_FILES["file"]["tmp_name"],
-      "../images/". $_FILES["file"]["name"]);
-$picname = $_FILES["file"]["name"];
-if($picname)
-{
-$new1 = makeimage($picname, 'tn_', "../images/", 70, 70);
-//$new2 = makeimage2($picname, 'tn2_', "images/", 70, 70);
-mysql_query("UPDATE members SET pic = '$picname' WHERE username='$_SESSION[SESS_MEMBER_ID]'");
-}
+// if($_GET["type"] == 2)
+// {
+// move_uploaded_file($_FILES["file"]["tmp_name"],
+//       "../images/". $_FILES["file"]["name"]);
+// $picname = $_FILES["file"]["name"];
+// if($picname)
+// {
+// $new1 = makeimage($picname, 'tn_', "../images/", 70, 70);
+// //$new2 = makeimage2($picname, 'tn2_', "images/", 70, 70);
+// mysql_query("UPDATE members SET pic = '$picname' WHERE username='$_SESSION[SESS_MEMBER_ID]'");
+// }
 
-$feed_date =strtotime("now");
-$dob = $_POST["month"].'/'.$_POST["date"].'/'.$_POST["year"];
-$dob_str = strtotime($dob);
-mysql_query("UPDATE members SET name = '$_POST[name]',dob = '$dob_str', email='$_POST[email]', mobile = '$_POST[mobile]', address='$_POST[address]', city='$_POST[city]', state='$_POST[state]' WHERE username='$_SESSION[SESS_MEMBER_ID]'");
+// $feed_date =strtotime("now");
+// $dob = $_POST["month"].'/'.$_POST["date"].'/'.$_POST["year"];
+// $dob_str = strtotime($dob);
+// mysql_query("UPDATE members SET name = '$_POST[name]',dob = '$dob_str', email='$_POST[email]', mobile = '$_POST[mobile]', address='$_POST[address]', city='$_POST[city]', state='$_POST[state]', priv = '$_POST[priv]', super_admin = '$_POST[super_admin]' WHERE username='$_SESSION[SESS_MEMBER_ID]'");
 
-header("Location: ../manage.php?type=profile");
-}
+// header("Location: ../manage.php?type=profile");
+// }
 
 if($_GET["type"] == 3)
 {
 $sql="SELECT * from members WHERE username='$_SESSION[SESS_MEMBER_ID]'";
-											$result=mysql_query($sql);
-											$row = mysql_fetch_array($result);
+$result=mysql_query($sql);
+$row = mysql_fetch_array($result);
 $pass = md5($_POST["new_p"]);
 if(md5($_POST["new_p"]) == md5($_POST["re_new_p"]))
 {
@@ -227,7 +227,7 @@ $centers = (isset($_POST["centers"]))?implode(',', $_POST["centers"]):'';
 $feed_date =strtotime("now");
 $dob = $_POST["month"].'/'.$_POST["date"].'/'.$_POST["year"];
 $dob_str = strtotime($dob);
-$sql = "UPDATE members SET name = '$_POST[name]',dob = '$dob_str', email='$_POST[email]', mobile = '$_POST[mobile]', address='$_POST[address]', city='$_POST[city]', state='$_POST[state]', add_city = '$_POST[add_city]',add_center = '$_POST[add_center]',updates = '$_POST[updates]',query_table = '$_POST[query_table]',structure = '$_POST[structure]' WHERE id='$_POST[user_id]'";
+$sql = "UPDATE members SET name = '$_POST[name]',dob = '$dob_str', email='$_POST[email]', mobile = '$_POST[mobile]', address='$_POST[address]', city='$_POST[city]', state='$_POST[state]', priv = '$_POST[priv]', super_admin = '$_POST[super_admin]', city_id = '$_POST[city_id]', center_id = '$_POST[center_id]' WHERE id='$_POST[user_id]'";
 
 mysql_query($sql);
 

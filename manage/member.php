@@ -61,6 +61,7 @@ function edit_priv() {
 
 
 <?php
+$privledges = array("admin"=>'Admin',"citycord"=>'City Coordinator',"cntercord"=>"Center Coordinator","coach"=>"Coach");
 if($_GET["id"])
 {
 $qry="SELECT * FROM members WHERE id='$_GET[id]'";
@@ -201,6 +202,56 @@ $tr_state = array('Andaman and Nicobar','Andhra Pradesh', 'Arunachal Pradesh', '
 							}
 							?>
 							<tr>
+									<tr>
+								<td width="40%" align="right">Select City
+								</td>
+								<td>
+									<?php
+										echo '
+										<select id="ctlcityid" name="city_id">
+										<option value="0">Select City</option>';
+
+										$sql_case="SELECT * from city ORDER BY city_name ASC";
+										$result_case=mysql_query($sql_case);
+										$count_city =1;
+										while($row = mysql_fetch_array($result_case))
+										{
+											echo '<option value="'.$row["id"].'" ';
+											echo ($row["id"] == $row_edit["city_id"])?'selected':'';
+											echo '>'.$row["city_name"].'</option>';
+											$count_city++;
+										}
+										echo '</select>';
+									?>
+
+
+
+
+								</td>
+							</tr>
+							<tr>
+								<td width="40%" align="right">Select Center
+								</td>
+								<td>
+									<?php
+
+										echo '<select id="ctlcenterid" name="center_id">';
+										echo '<option value="0">Select Center</option>';
+										if($row_edit["city_id"] != 0){
+											$query_center = mysql_query("SELECT id, center_name from center where city_id = '$row_edit[city_id]' ");
+											while($row_center = mysql_fetch_array($query_center))
+											{
+												echo '<option value="'.$row_center["id"].'" ';
+												echo ($row_center["id"] == $row_edit["center_id"])?'selected':'';
+												echo '>'.$row_center["center_name"].'</option>';
+												$count_city++;
+											}
+										}
+
+										echo '</select>';
+									?>
+								</td>
+							</tr>
 							<td colspan="2">
 							DOB:&nbsp;&nbsp;&nbsp;Date <select name="date">
 							<?php
@@ -254,7 +305,21 @@ $tr_state = array('Andaman and Nicobar','Andhra Pradesh', 'Arunachal Pradesh', '
 							</td>
 							<td ><input type="text" name="email" value="<?php echo $row_edit["email"];?>"></td>
 							</tr>
-							
+							<tr>
+							<td align="right">Priviledge
+							</td>
+							<td >
+								<select name="priv">
+									<?php
+										foreach ($privledges as $key => $value) {
+											echo '<option value='.$key.' ';
+											echo ($key == $row_edit["priv"])?"selected":"";
+											echo '>'.$value.'</option>';
+										}
+									?>
+								</select>
+							</td>
+							</tr>
 							
 							<tr>
 							<td align="right">Mobile No.
@@ -294,35 +359,11 @@ $tr_state = array('Andaman and Nicobar','Andhra Pradesh', 'Arunachal Pradesh', '
 							</tr>
 							
 
-							<tr>	
-								<td align="right">Updates</td>
-								<td>
-									<?php select_fields('updates',$row_edit["updates"]) ?>
-								</td>
-							</tr>
-							<tr>
-								<td align="right">Query</td>
-								<td>
-									<?php select_fields('query_table',$row_edit["query_table"]) ?>
-								</td>
-							</tr>
-							
-							<tr>
-								<td align="right">Structure</td>
-								<td>
-									<?php select_fields('structure',$row_edit["structure"]) ?>
-								</td>
-							</tr>
-							<tr>
-								<td align="right">Add City</td>
-								<td>
-									<?php select_fields('add_city',$row_edit["add_city"]) ?>
-								</td>
 							</tr>
 								<tr>
-								<td align="right">Add Center</td>
+								<td align="right">Super Admin?</td>
 								<td>
-									<?php select_fields('add_center',$row_edit["add_center"]) ?>
+									<?php select_fields('super_admin',$row_edit["super_admin"]) ?>
 								</td>
 							</tr>
 
@@ -365,16 +406,13 @@ $tr_state = array('Andaman and Nicobar','Andhra Pradesh', 'Arunachal Pradesh', '
 						Available Members:
 						<?php
 						
-								$qry="SELECT * FROM members ";
-								if($priv != 'admin'){
-								$qry = $qry." WHERE train_city='$city' ";}
-								$qry = $qry."ORDER BY train_city ASC";
+								$qry="SELECT members.*, city.city_name, center.center_name FROM members left join city on members.city_id = city.id left join center on members.center_id = center.id order by members.priv, members.name asc ";
 								$result=mysql_query($qry);
-								//$row_num_qry = mysql_num_rows($result);
+
 						?>
 						<div id="gen_form">
-						<table cellspacing="2" >
-						<tr class="top_m color1"><td width="150"  align="center">Name</td><td width="100"  align="center">Username</td><td width="100"  align="center">Privledge</td><td>City</td><td>Center</td><td>Edit</td>
+						<table cellspacing="2" width="100%" >
+						<tr class="top_m color1"><td width="150"  align="center">Name</td><td width="100"  align="center">Username</td><td width="100"  align="center">Type</td><td>City</td><td>Center</td><td>Edit</td><td>Edit Privilege</td>
 						<?php
 						if($priv=='admin')
 						{
@@ -394,7 +432,7 @@ $tr_state = array('Andaman and Nicobar','Andhra Pradesh', 'Arunachal Pradesh', '
 						{
 						echo '<tr style="background:#EEE">';
 						}
-						  echo '<td width="150" align="left">'.$row["name"].'</td><td align="center">'.$row["username"].'</td><td align="center">'.$row["priv"].'</td><td align="center">'.$row["train_city"].'</td><td align="center">'.$row["center"].'</td><td><a href="?type=member&amp;id='.$row["id"].'"><img src="edit.png"></a></td>';
+						  echo '<td width="150" align="left">'.$row["name"].'</td><td align="center">'.$row["username"].'</td><td align="center">'.$privledges[$row["priv"]].'</td><td align="center">'.$row["city_name"].'</td><td align="center">'.$row["center_name"].'</td><td><a href="?type=member&amp;id='.$row["id"].'"><img src="edit.png"></a></td><td><a href="?type=member_priv&amp;id='.$row["id"].'" target="_blank"><img src="edit.png"></a></td>';
 						  if($priv=='admin')
 						  {
 						  echo'

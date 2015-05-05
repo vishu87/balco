@@ -136,7 +136,6 @@ color:#000; padding:3px 5px 9px 5px; background:#FF0;
 						options += '<option value="' + j[i].optionValue + '">' + j[i].optionDisplay + '</option>';
 					}
 					$("#ctlcenterid").html(options);
-					//$('#ctlcenter option:first').attr('selected', 'selected');
 				})
 			})	
 			
