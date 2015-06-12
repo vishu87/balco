@@ -57,7 +57,7 @@ return $str;
 							$sql_add = "and first_group IN (".$group_ids.")";
 						}
 
-						$sql_case="SELECT students.id, active, dob, name, school, father, father_mob, doe, first_group, group_name as groupid, center.center_name as center, city.city_name as train_city  from students join groups on students.first_group = groups.id join center on groups.center_id = center.id join city on center.city_id = city.id  where  active IN (0,-1) ".$sql_add." order by dos desc";
+						$sql_case="SELECT students.id, active, dob, name, email, mobile, school, father, father_mob, father_email, mother, mother_mob, mother_email, students.city, students.state, doe, first_group, group_name as groupid, students.address, center.center_name as center, city.city_name as train_city  from students join groups on students.first_group = groups.id join center on groups.center_id = center.id join city on center.city_id = city.id  where  active IN (0,-1) ".$sql_add." order by dos desc";
 						$result_case=mysql_query($sql_case);
 							?>		
 						</div>
@@ -137,27 +137,7 @@ return $str;
 									
 									$schol = 'schol1';
 									
-									if($row["active"] == 1)
-									{
-										continue;
-									}
-									if($priv == 'coach')
-									{
-										$qry="SELECT id FROM coach_groups WHERE (coach_id = '$id_coach' AND active='0') AND ( group_name='$row[groupid]' AND center_name='$row[center]')";
-										$result=mysql_query($qry);
-										$row_num_qry = mysql_num_rows($result);
-										//echo $row_num_qry;
-										if($row_num_qry == 0) continue;
-									}
 									
-									$qry2="SELECT sub_fee FROM payment_history WHERE student_id = '$row[id]' ORDER BY dos DESC";
-										$result2=mysql_query($qry2);
-										$row2 = mysql_fetch_array($result2);
-										
-										if($row2["sub_fee"] == 0 && $priv == 'general')
-										{
-										$schol ='schol2';
-										}
 									$age = duration($row["dob"]);
 									if($count%2 ==0)
 									{
@@ -261,6 +241,7 @@ return $str;
 							<?php 
 							if($priv != 'general')
 							{
+								//echo $sql_case;
 							?>
 							<BR>Check all: <input type='checkbox' name='checkall' onclick='checkedAll();' checked="true">&nbsp;&nbsp;&nbsp;<a href="list_xl.php?case=<?php echo base64_encode($sql_case);?>">Export to excel</a>
     

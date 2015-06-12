@@ -85,7 +85,7 @@ $styleArray4 = array('font' => array('bold' => true,'color' => array('argb' => '
 $styleArray5 = array('alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,),);
 
 
-$objPHPExcel->getActiveSheet()->getStyle('A1:T1')->applyFromArray($styleArray1);
+$objPHPExcel->getActiveSheet()->getStyle('A1:U1')->applyFromArray($styleArray1);
 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', 'SN');
 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B1', 'Name');
 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C1', 'DOB');
@@ -130,26 +130,14 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
 							$count_student = 0;
 							while($row_att = mysql_fetch_array($result_att))
 							{
-								$sql_pay="SELECT * from payment_history WHERE student_id='$row_att[id]' ORDER BY doe DESC";
+								$sql_pay="SELECT * from payment_history WHERE student_id='$row_att[id]' ORDER BY doe DESC limit 1";
 								$result_pay=mysql_query($sql_pay);
 								$row_pay = mysql_fetch_array($result_pay);
-								if($row_att["active"] == 1)
-									{
-										continue;
-									}
-									
-									if( $row_att["doe"])
-									{
-									if(strtotime("now") < strtotime('- 15 days',$row_att["doe"]))
-									{
-										continue;
-									}
-									
-									}
+								
 									$count_student++;
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$seq, $count_student);	
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$seq, $row_att["name"]);
-		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$seq, date("d/m/y", $row_att["dob"]));
+		if($row_att["dob"]) $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$seq, date("d/m/y", $row_att["dob"]));
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$seq, $row_att["train_city"]);
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$seq, $row_att["center"]);
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$seq, $row_att["groupid"]);

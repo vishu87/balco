@@ -31,10 +31,6 @@ with (thisform)
     var arr2 = $("#inputField1").val().split('-');
     var date2 = new Date(arr2[1]+'/'+arr2[0]+'/'+arr2[2]);
     
-    if(date2 < date1 ){
-    	alert("Payment date can not be less than subscription start date");
-    	return false;
-    } 
 
   }
 }

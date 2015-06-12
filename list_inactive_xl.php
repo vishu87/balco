@@ -140,7 +140,7 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
 									
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$seq, $count_student);	
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$seq, $row_att["name"]);
-		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$seq, date("d/m/y", $row_att["dob"]));
+		if($row_att["dob"]) $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$seq, date("d/m/y", $row_att["dob"]));
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$seq, $row_att["train_city"]);
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$seq, $row_att["center"]);
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$seq, $row_att["groupid"]);
