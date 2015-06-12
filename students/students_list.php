@@ -29,7 +29,9 @@ return $str;
 
 ?> 
 <div class="top_m color1">
-						<a href="students.php?type=browse" style="text-decoration:underline">Browse Students</a> :
+	Students :
+	<?php if($_GET["limit"]) echo 'Showing latest '.$_GET["limit"].' students' ?>
+						<a href="students.php?type=browse" style="text-decoration:underline">Browse All Students</a>
 						
 						<?php
 						$sql_add = '';
@@ -58,6 +60,7 @@ return $str;
 						}
 
 						$sql_case="SELECT students.id, active, dob, name, email, mobile, school, father, father_mob, father_email, mother, mother_mob, mother_email, students.city, students.state, doe, first_group, group_name as groupid, students.address, center.center_name as center, city.city_name as train_city  from students join groups on students.first_group = groups.id join center on groups.center_id = center.id join city on center.city_id = city.id  where  active IN (0,-1) ".$sql_add." order by dos desc";
+						if($_GET["limit"]) $sql_case = $sql_case.' limit '.$_GET["limit"];
 						$result_case=mysql_query($sql_case);
 							?>		
 						</div>

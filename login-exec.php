@@ -91,7 +91,7 @@
 			$_SESSION["adjustment"] = $row["count"];
 			
 			session_write_close();
-			header("location: students.php?type=browse");
+			header("location: students.php?type=browse&limit=100");
 			exit();
 		}else {
 			//Login failed
