@@ -227,10 +227,10 @@ return $str;
     <br>
 	<br>
 	<?php
-	if($center_id )
+	if($center_id && !$group_id )
 	{
 	?>
-		<a href="list_paydue_special_xl.php?city=<?php echo $city_id;?>&amp;center=<?php echo $center_id;?>">Special List: Export to excel</a>
+		<a href="list_paydue_special_xl.php?case=<?php echo base64_encode($sql_case);?>">Excel : Group Wise Payment Due Report for this center</a>
 	<?php
 	}
 
