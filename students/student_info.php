@@ -306,6 +306,21 @@ if($row_student["active"] == 1){
 	echo '&nbsp;&nbsp;Last Class Attended: ';
 	echo ($row_in["last_class"])?date("d-M-y",$row_in["last_class"]):'';
 }
+if($row_student["active"] == 2){
+	$sql_in = mysql_query("SELECT inactive_on,last_class, add_date,remark_pa_in,mark_pa_in ,date_rejoin from inactive_history where student_id='$row_student[id]' order by id desc ");
+	$row_in = mysql_fetch_array($sql_in);
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;Inactive Reason: '.$row_student["main_reason"]."&nbsp;&nbsp;".$row_student["other_reason"];
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;Inactivation Marked Date: ';
+	echo ($row_in["inactive_on"])?date("d-M-y",$row_in["inactive_on"]):'';
+	echo '&nbsp;&nbsp;Last Class Attended: ';
+	echo ($row_in["last_class"])?date("d-M-y",$row_in["last_class"]):'';
+	echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;Partially Inactive Mark on: ';
+	echo ($row_in["mark_pa_in"])?date("d-M-y",$row_in["mark_pa_in"]):'';
+	echo '&nbsp;&nbsp;Date of Rejoining: ';
+	echo ($row_in["date_rejoin"])?date("d-M-y",$row_in["date_rejoin"]):'';
+	echo '&nbsp;&nbsp;Remark: ';
+	echo $row["remark_pa_in"];
+}
 
 ?>
 

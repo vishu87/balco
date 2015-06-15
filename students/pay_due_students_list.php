@@ -73,7 +73,7 @@ return $str;
 
 						$date_match = strtotime('+ 15 days',strtotime("now"));
 
-						$sql_case="SELECT students.id, active, dob, name, email, mobile, school, father, father_mob, father_email, mother, mother_mob, mother_email, students.city, students.state, doe, first_group, group_name as groupid, students.address, center.center_name as center, city.city_name as train_city  from students join groups on students.first_group = groups.id join center on groups.center_id = center.id join city on center.city_id = city.id  where  active IN (0,-1) and students.doe < '$date_match' ".$sql_add." order by dos desc";
+						$sql_case="SELECT students.id, active, dob, name, email, mobile, school, father, father_mob, father_email, mother, mother_mob, mother_email, students.city, students.state, doe, first_group, group_name as groupid, students.address, center.center_name as center, city.city_name as train_city  from students join groups on students.first_group = groups.id join center on groups.center_id = center.id join city on center.city_id = city.id  where  active IN (0,-1,2) and students.doe < '$date_match' ".$sql_add." order by dos desc";
 						$result_case=mysql_query($sql_case);
 							?>	
 						</div>
@@ -183,9 +183,16 @@ return $str;
 									}
 									echo '</td>
 									<td  class="schol2">';
-									if($row["doe"])
-									{
-									echo duration2($row["doe"]);
+									if($row["doe"]) {
+										if($row["active"] == 2){
+											$query_par_in = mysql_query("SELECT last_class, date_rejoin from inactive_history where student_id= '$row[id]' order by add_date desc limit 1 ");
+											$row_par_in = mysql_fetch_array($query_par_in);
+											if($row_par_in){
+												echo duration2($row["doe"] - $row_par_in["last_class"] + $row_par_in["date_rejoin"]);
+											}
+										} else {
+											echo duration2($row["doe"]);
+										}
 									}
 									else
 									{
@@ -194,8 +201,8 @@ return $str;
 									echo '</td>';
 									echo '<td class="'.$schol.'">';
 									$qry="SELECT sub_fee FROM payment_history WHERE student_id= '$row[id]' ORDER BY doe DESC limit 1";
-										$result_last=mysql_query($qry);
-										$row_last_amount= mysql_fetch_array($result_last);
+									$result_last=mysql_query($qry);
+									$row_last_amount= mysql_fetch_array($result_last);
 									if($row_last_amount["sub_fee"])
 									{
 										echo $row_last_amount["sub_fee"];
