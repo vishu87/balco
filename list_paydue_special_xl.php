@@ -168,6 +168,7 @@ $styleArray5 = array('alignment' => array('horizontal' => PHPExcel_Style_Alignme
 
 	// Rename sheet
 		$objPHPExcel->getActiveSheet()->setTitle($row_att["groupid"]);
+		$center = $row_att["center"];
 }
 
 // Set active sheet index to the first sheet, so Excel opens this as the first sheet
@@ -176,7 +177,7 @@ $styleArray5 = array('alignment' => array('horizontal' => PHPExcel_Style_Alignme
 
 // Redirect output to a client’s web browser (Excel5)
 header('Content-Type: application/vnd.ms-excel');
-header('Content-Disposition: attachment;filename="'.$_GET["center"].'on'.date("d-m-Y", strtotime("today")).'.xls"');
+header('Content-Disposition: attachment;filename="'.$center.'_PaymentDue_'.date("d-m-Y", strtotime("today")).'.xls"');
 header('Cache-Control: max-age=0');
 
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');

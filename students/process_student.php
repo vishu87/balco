@@ -252,14 +252,30 @@ if($_GET["type"] == 'inactive')
 {
 
 $doi = strtotime($_POST["doi"]);
+$dolc = strtotime($_POST["dolc"]);
 mysql_query("UPDATE students SET active= '-1', main_reason ='$_POST[inactive_reason]' , other_reason='$_POST[other_reason]' WHERE id='$_GET[id]'");
 
-mysql_query("INSERT into inactive_history (student_id,inactive_on,add_date,added_by) VALUES ('$_GET[id]','$doi','".strtotime("now")."','$_SESSION[SESS_MEMBER_ID]') ");
+mysql_query("INSERT into inactive_history (student_id,inactive_on,last_class,add_date,added_by) VALUES ('$_GET[id]','$doi','$dolc','".strtotime("now")."','$_SESSION[SESS_MEMBER_ID]') ");
 
 header("Location: ../students.php?type=browse&id=".$_GET["id"]);
 }
 
+if($_GET["type"] == 'pa_inactive'){
 
+	$dom = strtotime($_POST["dom"]);
+	$remark = mysql_real_escape_string($_POST["remark"]);
+	$dorj = strtotime($_POST["dorj"]);
+
+	$query = mysql_query("SELECT id from inactive_history where student_id = '$_GET[id]' order by add_date desc limit 1 ");
+	if(mysql_num_rows($query) > 0){
+		$row = mysql_fetch_array($query);
+		mysql_query("UPDATE students SET active= '2' WHERE id='$_GET[id]'");
+		mysql_query("UPDATE inactive_history set remark_pa_in = '$remark', mark_pa_in = '$dom', date_rejoin = '$dorj' where id = $row[id] ");
+	}
+
+	
+	header("Location: ../students.php?type=browse&id=".$_GET["id"]);
+}
 
 if($_GET["type"] == 6)
 {

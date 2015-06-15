@@ -115,26 +115,7 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
 							{
 								$sql_pay="SELECT * from payment_history WHERE student_id='$row_att[id]' ORDER BY id DESC";
 								$result_pay=mysql_query($sql_pay);
-								$row_pay = mysql_fetch_array($result_pay);
-								if($row_att["active"] != 1)
-									{
-										continue;
-									}
-									else
-									{
-									
-									if($_GET["priv"] == 'coach')
-									{
-										$qry="SELECT * FROM coach_groups WHERE coach_id = '$_GET[id]' AND ( group_name='$row_att[groupid]' AND center_name='$row_att[center]')";
-										$result=mysql_query($qry);
-										$row_num_qry = mysql_num_rows($result);
-										//echo $row_num_qry;
-										if($row_num_qry == 0) continue;
-									}
-									
-									
-									}
-									
+								$row_pay = mysql_fetch_array($result_pay);									
 									
 									$count_student++;
 									

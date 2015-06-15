@@ -64,6 +64,9 @@
 							if($_GET["type"] == 'in_stu'){
 							include('students/inactive_students_list.php');	
 							}
+							if($_GET["type"] == 'pa_inactive'){
+							include('students/pa_inactive_students_list.php');	
+							}
 							if($_GET["type"] == 'pay_due'){
 							include('students/pay_due_students_list.php');	
 							}

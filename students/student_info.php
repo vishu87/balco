@@ -20,16 +20,14 @@ with (field)
     }
   }
 }
-function validate_form(thisform)
-{
-with (thisform)
-  {
-   if (validate_required(other_reason,"Please fill the reason!")==false)
-  {other_reason.focus();return false;}
-  
-  
-  }
+
+function validate_form(thisform) {
+	with (thisform) {
+   		if (validate_required(other_reason,"Please fill the reason!")==false)
+  		{other_reason.focus();return false;}
+  	}
 }
+
 </script>
 <?php
 $row_student = mysql_fetch_array($result_top);
@@ -224,23 +222,34 @@ $num_rows = mysql_num_rows($result_case);
 							
 							if( strtotime("now") > $row_student["doe"] || !$row_student["doe"])
 							{
-								if($row_student["active"] != 0)
+								if($row_student["active"] != 0 && $row_student["active"] != 2)
 								{
 									if($row_student["active"] == 1){
 										echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#fff; padding:3px 5px 3px 5px; background:#5F6888;">INACTIVE STUDENT</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-									} else {
+									}	else  {
 										echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#fff; padding:3px 5px 3px 5px; background:#5F6888;">INACTIVE SENT FOR APPROVAL</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 									}
 								}
 								else
 								{
+									if($row_student["active"] == 2){
+										echo '&nbsp;&nbsp;<span style="color:#fff; padding:3px 5px 3px 5px; background:#5F6888;">PARTIALLY INACTIVE STUDENT</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+									}
+
 									if(in_array($row_student["first_group"], $all_groups_access_edit)){
 							?>
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="mark_in1" id="a_inactive"style="">MARK AS INACTIVE</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							&nbsp;&nbsp;<a href="#" class="mark_in1" id="a_inactive"style="">MARK AS INACTIVE</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							
 							<?php
-						}
+									}
+
+
+
+								}
 							}
+							if($row_student["active"] == 1){ ?>
+								<a href="#" class="mark_in1" id="pa_inactive"style="">MARK AS PARTIALLY INACTIVE</a>&nbsp;&nbsp;&nbsp;&nbsp;
+							<?php
 							}
 							
 							?>
@@ -249,39 +258,53 @@ $num_rows = mysql_num_rows($result_case);
 							<?php
 							}
 							?>	
-<div id="inactive_div" class="invisi" style="background:#ff0; ">
-<div style="margin:10px">
-<form action="students/process_student.php?type=inactive&id=<?php echo $_GET["id"]?>" method="post" onsubmit="return validate_form(this)" enctype="multipart/form-data">
-&nbsp;&nbsp;&nbsp;&nbsp;Reason: 
-<select name="inactive_reason"  id="inactive_reason" style="padding:2px 5px 2px 5px; margin:10px;">
-<option>Studies</option>
-<option>Injury</option>
-<option>Other Football Institute</option>
-<option>Change of Interest</option>
-<option>Weather</option>
-<option>Conveyance/Timings</option>
-<option>Not Happy With Coaching</option>
-<option value="others">Others</option>
-</select><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<font style="font-size:11px; font-weight:bold;">(in case of others)&nbsp;&nbsp;</font><input type="text" name="other_reason" style="padding:2px 5px 2px 5px; margin:10px;">
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Inactive Date <input type="text" size="12" name="doi" id="inputField1" /> (dd-mm-yyyy)
-<br><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<input type="SUBMIT" Value="SUBMIT">&nbsp;&nbsp;<input onclick="javascript:window.history.back()" type="BUTTON" name="cancel" value="CANCEL"><br><br>
-</form>
-</div>
-</div>		
+		<div id="inactive_div" class="invisi" style="background:#ff0; ">
+			<div style="margin:10px">
+				<form action="students/process_student.php?type=inactive&id=<?php echo $_GET["id"]?>" method="post" onsubmit="return validate_form(this)" enctype="multipart/form-data">
+				&nbsp;&nbsp;&nbsp;&nbsp;Reason: 
+				<select name="inactive_reason"  id="inactive_reason" style="padding:2px 5px 2px 5px; margin:10px;">
+				<option>Studies</option>
+				<option>Injury</option>
+				<option>Other Football Institute</option>
+				<option>Change of Interest</option>
+				<option>Weather</option>
+				<option>Conveyance/Timings</option>
+				<option>Not Happy With Coaching</option>
+				<option value="others">Others</option>
+				</select><br>
+				&nbsp;&nbsp;&nbsp;&nbsp;<font style="font-size:11px; font-weight:bold;">(in case of others)&nbsp;&nbsp;</font><input type="text" name="other_reason" style="padding:2px 5px 2px 5px; margin:10px;">
+				<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;Inactive Marking Date <input type="text" size="12" name="doi" id="inputField1" /> (dd-mm-yyyy)
+				<br><br>
+				Last Class Attended <input type="text" size="12" name="dolc" id="inputField2" /> (dd-mm-yyyy)
+				<br><br>
+				&nbsp;&nbsp;&nbsp;&nbsp;<input type="SUBMIT" Value="SUBMIT">&nbsp;&nbsp;<input onclick="location.reload()" type="button" name="cancel" value="CANCEL"><br><br>
+				</form>
+			</div>
+		</div>
+		<div id="pa_inactive_div" class="invisi" style="background:#ff0; ">
+			<div style="margin:10px">
+				<form action="students/process_student.php?type=pa_inactive&id=<?php echo $_GET["id"]?>" method="post" onsubmit="return validate_form(this)" enctype="multipart/form-data">
+				&nbsp;&nbsp;&nbsp;&nbsp;Remark&nbsp;&nbsp;<input type="text" name="remark" style="padding:2px 5px 2px 5px; margin:10px;">
+				<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;Date of Marking&nbsp;&nbsp;<input type="text" size="12" name="dom" id="inputField3" /> (dd-mm-yyyy)
+				<br><br>
+				&nbsp;&nbsp;&nbsp;&nbsp;Date of Rejoining&nbsp;&nbsp;<input type="text" size="12" name="dorj" id="inputField4" /> (dd-mm-yyyy)
+				<br><br>
+				&nbsp;&nbsp;&nbsp;&nbsp;<input type="SUBMIT" Value="SUBMIT">&nbsp;&nbsp;<input onclick="location.reload()" type="button" name="cancel" value="CANCEL"><br><br>
+				</form>
+			</div>
+		</div>	
 <div>
 <?php
-if($row_student["active"] == 1)
-{
-	$sql_in = mysql_query("SELECT inactive_on,add_date from inactive_history where student_id='$row_student[id]' order by id desc ");
+if($row_student["active"] == 1){
+	$sql_in = mysql_query("SELECT inactive_on,last_class,add_date from inactive_history where student_id='$row_student[id]' order by id desc ");
 	$row_in = mysql_fetch_array($sql_in);
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;Inactive Reason: '.$row_student["main_reason"]."&nbsp;&nbsp;".$row_student["other_reason"];
-	echo '&nbsp;&nbsp;&nbsp;&nbsp;Inactivation Date: ';
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;Inactivation Marked Date: ';
 	echo ($row_in["inactive_on"])?date("d-M-y",$row_in["inactive_on"]):'';
-	echo '&nbsp;&nbsp;Marked on: ';
-	echo ($row_in["add_date"])?date("d-M-y",$row_in["add_date"]):'';
+	echo '&nbsp;&nbsp;Last Class Attended: ';
+	echo ($row_in["last_class"])?date("d-M-y",$row_in["last_class"]):'';
 }
 
 ?>

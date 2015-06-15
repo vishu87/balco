@@ -98,6 +98,16 @@ color:#000; padding:3px 5px 9px 5px; background:#FF0;
 			target:"inputField2",
 			dateFormat:"%d-%m-%Y"
 		});
+		new JsDatePick({
+			useMode:2,
+			target:"inputField3",
+			dateFormat:"%d-%m-%Y"
+		});
+		new JsDatePick({
+			useMode:2,
+			target:"inputField4",
+			dateFormat:"%d-%m-%Y"
+		});
 
 
 
@@ -204,7 +214,16 @@ color:#000; padding:3px 5px 9px 5px; background:#FF0;
 			  $("#inactive_div").removeClass().addClass('visi');
 			   $("#a_inactive").removeClass().addClass('mark_in2');
 			
-	})
+			});
+
+			$("#pa_inactive").click(function(){
+			
+			
+			  //add message and change the class of the box and start fading
+			  $("#pa_inactive_div").removeClass().addClass('visi');
+			   $("#pa_inactive").removeClass().addClass('mark_in2');
+			
+			})
 			
 		})
 		

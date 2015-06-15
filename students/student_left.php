@@ -1,5 +1,5 @@
 <?php
-$types = array("browse"=>"Browse Students", "in_stu"=>"Inactive Students","pay_due"=>"Payment Notifications");
+$types = array("browse"=>"Browse Students", "pa_inactive" => "Partially Inactive" , "in_stu"=>"Inactive Students","pay_due"=>"Payment Notifications");
 $cities = array();
 $centers = array();
 $groups = array();
