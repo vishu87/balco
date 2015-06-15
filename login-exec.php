@@ -90,6 +90,7 @@
 			$row = mysql_fetch_array($check);
 			$_SESSION["adjustment"] = $row["count"];
 			
+			unset($_SESSION['timeout']);
 			session_write_close();
 			header("location: students.php?type=browse&limit=100");
 			exit();

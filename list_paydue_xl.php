@@ -153,11 +153,17 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q'.$seq, $row_pay["sub_fee"]);
 		
 		if($row_att["doe"])
-									{
-									
-			$objPHPExcel->setActiveSheetIndex(0)->setCellValue('R'.$seq,duration2($row_att["doe"] ));
-		
-									}
+			{
+				if($row_att["active"] == 2){
+					$query_par_in = mysql_query("SELECT last_class, date_rejoin from inactive_history where student_id= '$row_att[id]' order by add_date desc limit 1 ");
+					$row_par_in = mysql_fetch_array($query_par_in);
+					if($row_par_in){
+						$objPHPExcel->setActiveSheetIndex(0)->setCellValue('R'.$seq,duration2($row_att["doe"] - $row_par_in["last_class"] + $row_par_in["date_rejoin"]));
+					}
+				} else {
+					$objPHPExcel->setActiveSheetIndex(0)->setCellValue('R'.$seq,duration2($row_att["doe"] ));
+				}
+			}
 									
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('S'.$seq, $row_att["address"]);
 		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('T'.$seq, $row_att["city"]);

@@ -149,7 +149,15 @@ $styleArray5 = array('alignment' => array('horizontal' => PHPExcel_Style_Alignme
 		$objPHPExcel->getActiveSheet()->setCellValue('G'.$seq, $row_pay["months"]);
 		if($row_att["doe"]) $objPHPExcel->getActiveSheet()->setCellValue('H'.$seq, date("d/m/y", $row_att["doe"]));
 		$objPHPExcel->getActiveSheet()->setCellValue('I'.$seq, $row_pay["sub_fee"]);
-		if($row_att["doe"])$objPHPExcel->getActiveSheet()->setCellValue('J'.$seq,duration2($row_att["doe"] ));
+		if($row_att["doe"]){
+			if($row_att["active"] == 2){
+				$query_par_in = mysql_query("SELECT last_class, date_rejoin from inactive_history where student_id= '$row_att[id]' order by add_date desc limit 1 ");
+				$row_par_in = mysql_fetch_array($query_par_in);
+				if($row_par_in){
+					$objPHPExcel->getActiveSheet()->setCellValue('J'.$seq,duration2($row_att["doe"] - $row_par_in["last_class"] + $row_par_in["date_rejoin"]));
+				}
+			} else $objPHPExcel->getActiveSheet()->setCellValue('J'.$seq,duration2($row_att["doe"] ));
+		}
 		
 		if($count_student%2 == 0)
 			{
