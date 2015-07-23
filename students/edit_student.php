@@ -264,7 +264,7 @@ $tr_state = array('Andaman and Nicobar','Andhra Pradesh', 'Arunachal Pradesh', '
 			Old group <select name="old_group">
 				<option value="0">Select</option>
 				<?php 
-					$query_groups = mysql_query("SELECT * from groups order by group_name asc");
+					$query_groups = mysql_query("SELECT groups.id, groups.group_name, center.center_name, city.city_name from groups join center on groups.center_id = center.id join city on center.city_id = city.id order by group_name asc");
 					while ($row_grp = mysql_fetch_array($query_groups)) {
 						echo '<option value="'.$row_grp["id"].'" ';
 						if($row_student["first_group"] == $row_grp["id"]) echo 'selected';
@@ -278,7 +278,7 @@ $tr_state = array('Andaman and Nicobar','Andhra Pradesh', 'Arunachal Pradesh', '
 			Change Group To <select name="first_group">
 				<option value="0">Select</option>
 				<?php 
-					$query_groups = mysql_query("SELECT * from groups order by group_name asc");
+					$query_groups = mysql_query("SELECT groups.id, groups.group_name, center.center_name, city.city_name from groups join center on groups.center_id = center.id join city on center.city_id = city.id order by group_name asc");
 					while ($row_grp = mysql_fetch_array($query_groups)) {
 						echo '<option value="'.$row_grp["id"].'" ';
 						echo '>'.$row_grp["group_name"].', '.$row_grp["center_name"].', '.$row_grp["city_name"].'</option>';

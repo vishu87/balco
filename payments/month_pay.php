@@ -1,30 +1,4 @@
-<?php
-require_once 'phplot/phplot.php';
-
-//Define the object
-$plot = new PHPlot();
-
-//Define some data
-$example_data = array(
-     array('a',3),
-     array('b',5),
-     array('c',7),
-     array('d',8),
-     array('e',2),
-     array('f',6),
-     array('g',7)
-);
-$plot->SetDataValues($example_data);
-
-//Turn off X axis ticks and labels because they get in the way:
-$plot->SetXTickLabelPos('none');
-$plot->SetXTickPos('none');
-
-//Draw it
-$plot->DrawGraph();
-
-
-?>
+<script type="text/javascript" src="js/canvasjs.min.js"></script>
 <script type="text/javascript">
 checked = true;
       function checkedAll () {
@@ -58,6 +32,8 @@ return $str;
 <div class="top_m color1">
 		<a href="students.php?type=browse" style="text-decoration:underline">Payments</a> :
 </div>
+
+  <div id="chartContainer" style="height: 400px; width: 60%; margin-left:20%"></div>
 	<?php
 
 	$query_add = '';
@@ -94,7 +70,7 @@ return $str;
 		$result_case=mysql_query($sql_case);
 		$array_sum = array();
 		$array_x = array();
-		ob_start();
+
 		?>		
 						
 						
@@ -160,7 +136,7 @@ return $str;
 				{
 					$month = date("M",$row["dor"]);
 					$year = date("y",$row["dor"]);
-					$mon_year = $month.'-'.$year;
+					$mon_year = $month.' '.$year;
 					if(!in_array($mon_year, $array_x)){
 						array_push($array_x, $mon_year);
 					}
@@ -242,17 +218,84 @@ return $str;
 	</div>
 	</div>
 <?php
-
-$output = ob_get_contents();
-ob_end_clean();
-echo $output;
-
-
+rsort($array_x);
 }
 else
 {
 
 echo "Please select from the left";
 }
-
+if(sizeof($array_x) > 0){
 ?>
+<script type="text/javascript">
+
+  window.onload = function () {
+    var chart = new CanvasJS.Chart("chartContainer", {
+
+      title:{
+        text: "Payment Overview",
+        fontSize: 20,          
+      },
+	toolTip: {
+		shared: true,
+		contentFormatter: function (e) {
+			var content = " ";
+			for (var i = 0; i < e.entries.length; i++) {
+				if(e.entries[i].dataSeries.name == "Amount"){
+
+					var indian_for=e.entries[i].dataPoint.y*5000;
+					indian_for=indian_for.toString();
+					var lastThree = indian_for.substring(indian_for.length-3);
+					var otherNumbers = indian_for.substring(0,indian_for.length-3);
+					if(otherNumbers != '')
+					    lastThree = ',' + lastThree;
+					var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+
+					content += e.entries[i].dataSeries.name + " " + "<strong>" + res + " Rs</strong>";
+				} else {
+					content += e.entries[i].dataSeries.name + " " + "<strong>" + e.entries[i].dataPoint.y + "</strong>";
+				}
+				content += "<br/>";
+			}
+			return content;
+		}
+	},
+	 axisX:{
+	   
+	   labelAutoFit: true,
+	   titleFontSize: 7
+	 },
+      data: [//array of dataSeries              
+        { //dataSeries object
+
+         /*** Change type "column" to "bar", "area", "line" or "pie"***/
+         type: "column",
+         name: "No of Transactions", 
+      		showInLegend: true, 
+         dataPoints: [
+         <?php $count = 0; foreach ($array_x as $mon) {
+         	echo '{ label: "'.$mon.'", y: '.sizeof($array_sum[$mon]).' }';
+         	if(++$count != sizeof($array_x)) echo ',';
+         } ?>
+         ]
+       },
+       { //dataSeries object
+
+         /*** Change type "column" to "bar", "area", "line" or "pie"***/
+         type: "column",
+         name: "Amount", 
+      		showInLegend: true, 
+         dataPoints: [
+         <?php $count = 0; foreach ($array_x as $mon) {
+         	echo '{ label: "'.$mon.'", y: '.(array_sum($array_sum[$mon])/5000).' }';
+         	if(++$count != sizeof($array_x)) echo ',';
+         } ?>
+         ]
+       }
+       ]
+     });
+
+    chart.render();
+  }
+  </script>
+  <?php } ?>
